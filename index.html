@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuración de Movimientos — Backoffice</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --surface2: #f1f5f9;
+      --border: #e2e8f0;
+      --border2: #cbd5e1;
+      --text: #0c050e;
+      --muted: #64748b;
+      --accent: #661fb8;
+      --accent2: #10b77f;
+      --green: #10b77f;
+      --green-bg: rgba(16, 185, 129, .10);
+      --red: #ef4444;
+      --red-bg: rgba(239, 68, 68, .10);
+      --blue: #3b82f6;
+      --tag-bg: #e2e8f0;
+    }
+
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── TOP NAV ── */
+    .topnav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 56px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .topnav-logo {
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: .04em;
+      color: var(--accent);
+    }
+
+    .topnav-logo span {
+      color: var(--text);
+    }
+
+    .topnav-links {
+      display: flex;
+      gap: 4px;
+      list-style: none;
+    }
+
+    .topnav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 6px;
+      transition: color .15s, background .15s;
+    }
+
+    .topnav-links a:hover {
+      color: var(--text);
+      background: var(--surface2);
+    }
+
+    .topnav-links a.active {
+      color: var(--text);
+      background: var(--surface2);
+    }
+
+    .topnav-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #61bb38;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 20px 40px 0;
+      font-size: 12px;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+    }
+
+    .breadcrumb a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--accent);
+    }
+
+    .breadcrumb-sep {
+      color: var(--border2);
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 24px 40px 0;
+      gap: 24px;
+    }
+
+    .page-header-left {
+      flex: 1;
+    }
+
+    .tenant-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--tag-bg);
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 11px;
+      font-family: 'DM Mono', monospace;
+      color: var(--accent);
+      letter-spacing: .06em;
+      margin-bottom: 10px;
+    }
+
+    .tenant-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+    }
+
+    .page-title {
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -.01em;
+      margin-bottom: 6px;
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Syne', sans-serif;
+      cursor: pointer;
+      border: none;
+      transition: all .15s;
+      letter-spacing: .02em;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #f5ecec;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent2);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      background: var(--surface2);
+      color: var(--text);
+      border-color: var(--border2);
+    }
+
+    /* ── STATS STRIP ── */
+    .stats-strip {
+      display: flex;
+      gap: 16px;
+      padding: 24px 40px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 130px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -.02em;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      letter-spacing: .04em;
+    }
+
+    .stat-card.green .stat-value {
+      color: var(--green);
+    }
+
+    .stat-card.amber .stat-value {
+      color: var(--accent);
+    }
+
+    .stat-card.neutral .stat-value {
+      color: var(--text);
+    }
+
+    /* ── MAIN CONTENT ── */
+    .main {
+      flex: 1;
+      padding: 0 40px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-family: 'DM Mono', monospace;
+      color: var(--muted);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    /* ── TABLE ── */
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .table-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      gap: 12px;
+    }
+
+    .table-toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 7px 12px;
+      font-size: 13px;
+      color: var(--text);
+      width: 220px;
+      transition: border-color .15s;
+    }
+
+    .search-box:focus-within {
+      border-color: var(--border2);
+    }
+
+    .search-box input {
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      width: 100%;
+    }
+
+    .search-box input::placeholder {
+      color: var(--muted);
+    }
+
+    .search-icon {
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .filter-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-family: 'DM Mono', monospace;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--border2);
+      color: var(--text);
+    }
+
+    .filter-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      padding: 11px 20px;
+      font-size: 11px;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: left;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      font-weight: 500;
+    }
+
+    thead th:last-child {
+      text-align: center;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background .12s;
+      cursor: default;
+    }
+
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: var(--surface2);
+    }
+
+    td {
+      padding: 15px 20px;
+      vertical-align: middle;
+    }
+
+    .movement-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .movement-name {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .movement-name-text {
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: -.01em;
+    }
+
+    .movement-name-code {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: .04em;
+    }
+
+    .badge-in {
+      background: rgba(45, 212, 160, .12);
+      color: var(--green);
+    }
+
+    .badge-out {
+      background: rgba(245, 101, 101, .12);
+      color: var(--red);
+    }
+
+    .badge-adj {
+      background: rgba(96, 165, 250, .12);
+      color: var(--blue);
+    }
+
+    .badge-neu {
+      background: var(--tag-bg);
+      color: var(--muted);
+    }
+
+    /* ── TOGGLE ── */
+    .toggle-cell {
+      text-align: center;
+    }
+
+    .toggle-wrap {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .toggle {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      cursor: pointer;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      background: var(--border2);
+      transition: background .2s;
+    }
+
+    .toggle input:checked+.toggle-track {
+      background: var(--green);
+    }
+
+    .toggle-thumb {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform .2s;
+      pointer-events: none;
+    }
+
+    .toggle input:checked~.toggle-thumb {
+      transform: translateX(20px);
+    }
+
+    .toggle-label {
+      font-size: 10px;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: .06em;
+      color: var(--muted);
+      transition: color .2s;
+    }
+
+    .toggle-label.on {
+      color: var(--green);
+    }
+
+    /* ── SAVE BAR (sticky) ── */
+    .save-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      transform: translateY(100%);
+      transition: transform .25s cubic-bezier(.4, 0, .2, 1);
+      z-index: 200;
+    }
+
+    .save-bar.visible {
+      transform: translateY(0);
+    }
+
+    .save-bar-msg {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+    }
+
+    .save-bar-msg .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: .3;
+      }
+    }
+
+    .save-bar-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      top: 72px;
+      right: 24px;
+      background: var(--surface);
+      border: 1px solid var(--green);
+      border-radius: 10px;
+      padding: 14px 20px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      transform: translateX(20px);
+      transition: all .25s;
+      z-index: 300;
+      pointer-events: none;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .4);
+      min-width: 260px;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .toast-icon {
+      font-size: 16px;
+    }
+
+    .toast-text {
+      flex: 1;
+    }
+
+    .toast-title {
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 2px;
+    }
+
+    .toast-sub {
+      font-size: 11px;
+      font-family: 'DM Mono', monospace;
+      color: var(--muted);
+    }
+
+    /* ── INFO BOX ── */
+    .info-box {
+      background: rgba(245, 166, 35, .06);
+      border: 1px solid rgba(245, 166, 35, .2);
+      border-radius: 10px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .info-box-icon {
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .info-box strong {
+      color: var(--accent);
+    }
+
+    /* ── ANIMATIONS ── */
+    .row-fade {
+      animation: rowIn .3s ease both;
+    }
+
+    @keyframes rowIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── LAYOUT & FORM ── */
+    .content-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .form-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-wrap h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .form-control {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-family: 'Syne', sans-serif;
+      color: var(--text);
+      outline: none;
+      transition: border-color .15s;
+    }
+
+    .form-control:focus {
+      border-color: var(--accent);
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    select.form-control {
+      appearance: none;
+      background-image: url('data:image/svg+xml;utf8,<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 4.5L6 7.5L9 4.5" stroke="%2364748b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 3px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TOP NAV -->
+  <nav class="topnav">
+    <div class="topnav-logo">SmartFran <span>Cloud</span></div>
+
+    <div class="topnav-user">
+      <span>Admin Sistema</span>
+      <div class="avatar">AS</div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="#">Tenants</a>
+    <span class="breadcrumb-sep">/</span>
+    <a href="#">Configuración</a>
+    <span class="breadcrumb-sep">/</span>
+    <span>Movimientos de Stock</span>
+  </div>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="tenant-badge">
+        <span class="tenant-dot"></span>
+        TENANT · 1
+      </div>
+      <br>
+      <br>
+      <h1 class="page-title">Tipos de movimiento de stock</h1>
+      <p class="page-subtitle">Cree y configure los movimientos de stock para la cadena.</p>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:8px;">
+      <button class="btn btn-ghost" onclick="window.history.back()">
+        ← Volver al tenant
+      </button>
+    </div>
+  </div>
+
+
+
+  <!-- MAIN -->
+  <main class="main">
+
+
+    <br>
+
+    <div class="content-split">
+      <div class="left-pane">
+        <div class="table-wrap">
+          <div class="table-toolbar">
+            <div class="table-toolbar-left">
+              <label class="search-box">
+                <span class="search-icon">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <circle cx="6" cy="6" r="4.5" stroke="#6b7280" stroke-width="1.3" />
+                    <path d="M9.5 9.5L12 12" stroke="#6b7280" stroke-width="1.3" stroke-linecap="round" />
+                  </svg>
+                </span>
+                <input type="text" id="searchInput" placeholder="Buscar tipo..." oninput="filterRows()" />
+              </label>
+              <button class="filter-btn" id="filterAll" onclick="setFilter('all')">Todos</button>
+              <button class="filter-btn" id="filterOn" onclick="setFilter('on')">Habilitados</button>
+              <button class="filter-btn" id="filterOff" onclick="setFilter('off')">Deshabilitados</button>
+            </div>
+          </div>
+
+          <div style="overflow-x:auto; padding-bottom: 8px;">
+            <table style="white-space: nowrap;">
+              <thead>
+                <tr>
+                  <th>Proceso</th>
+                  <th>Tipo</th>
+                  <th>EntityApply</th>
+                  <th>InputCost</th>
+                  <th>ShipmentType</th>
+                  <th>Asignación</th>
+                  <th>OperationVisible</th>
+                  <th style="text-align:center;">Estado</th>
+                </tr>
+              </thead>
+              <tbody id="movementsTable">
+                <!-- rows injected by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-pane">
+        <div class="form-wrap">
+          <h2>Nuevo tipo de movimiento</h2>
+
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" class="form-control" placeholder="Ej. Devolución a proveedor" />
+          </div>
+
+          <div class="form-group">
+            <label>Tipo</label>
+            <select class="form-control">
+              <option value="">Seleccione tipo...</option>
+              <option value="i">Ingreso (I)</option>
+              <option value="o">Egreso (O)</option>
+              <option value="oi">Ambos (O/I)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Costo</label>
+            <select class="form-control">
+              <option value="si">Sí</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Entidad a aplicar</label>
+            <input type="text" class="form-control" placeholder="Ej. Proveedor, Franquicia..." />
+          </div>
+
+          <div class="form-group">
+            <label>Tipo de envío</label>
+            <select class="form-control">
+              <option value="">Seleccione tipo de envío...</option>
+              <option value="interno">Interno</option>
+              <option value="externo">Externo</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Asignación (Mapeo de cuentas)</label>
+            <input type="text" class="form-control" placeholder="Ej. Cuenta origen / destino" />
+          </div>
+
+          <div class="form-group">
+            <label>Operación Visible</label>
+            <select class="form-control">
+              <option value="ambos">Ambos</option>
+              <option value="pos">POS</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-ghost">Cancelar</button>
+            <button class="btn btn-primary">Crear movimiento</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- SAVE BAR -->
+  <div class="save-bar" id="saveBar">
+    <div class="save-bar-msg">
+      <span class="dot"></span>
+      Tenés cambios sin guardar
+    </div>
+    <div class="save-bar-actions">
+      <button class="btn btn-ghost" onclick="discardChanges()">Descartar</button>
+      <button class="btn btn-primary" onclick="saveChanges()">
+        Guardar configuración
+      </button>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <span class="toast-icon">✓</span>
+    <div class="toast-text">
+      <div class="toast-title">Configuración guardada</div>
+      <div class="toast-sub" id="toastSub"></div>
+    </div>
+  </div>
+
+  <script>
+    // ── Data ──
+    const movements = [
+      {
+        id: 'venta',
+        name: 'Venta',
+        code: 'VENTA',
+        icon: '💰',
+        iconBg: 'rgba(96,165,250,.12)',
+        tipo: 'O',
+        entityApply: 'SALE : ADD',
+        inputCost: true,
+        shipmentType: 'Internal',
+        asignacion: 'stock.gastos.cmv',
+        operationVisible: '1 (POS)',
+        enabled: true,
+      },
+      {
+        id: 'anulacion_venta',
+        name: 'Anulación Venta',
+        code: 'ANUL_VENTA',
+        icon: '↩️',
+        iconBg: 'rgba(245,166,35,.12)',
+        tipo: 'I',
+        entityApply: 'SALE : DISCOUNT',
+        inputCost: true,
+        shipmentType: 'Internal',
+        asignacion: 'stock.gastos.cmv (Costo Histórico)',
+        operationVisible: '1 (POS)',
+        enabled: true,
+      },
+      {
+        id: 'compra_prov',
+        name: 'Compra Proveedor',
+        code: 'COMPRA_PROV',
+        icon: '📥',
+        iconBg: 'rgba(45,212,160,.12)',
+        tipo: 'I',
+        entityApply: '(Vacío)',
+        inputCost: false,
+        shipmentType: 'External',
+        asignacion: 'stock.altas.compra',
+        operationVisible: '2 (ADMIN)',
+        enabled: true,
+      },
+      {
+        id: 'ingreso_stock_inicial',
+        name: 'Ingreso Stock Inicial',
+        code: 'STOCK_INI',
+        icon: '📥',
+        iconBg: 'rgba(45,212,160,.12)',
+        tipo: 'I',
+        entityApply: '(Vacío)',
+        inputCost: false,
+        shipmentType: 'Internal',
+        asignacion: 'stock.altas.stock_inicial',
+        operationVisible: '2 (ADMIN)',
+        enabled: true,
+      },
+      {
+        id: 'ajuste_ingreso',
+        name: 'Ajuste Ingreso',
+        code: 'AJ_ING',
+        icon: '⚖️',
+        iconBg: 'rgba(96,165,250,.12)',
+        tipo: 'I',
+        entityApply: '(Vacío)',
+        inputCost: true,
+        shipmentType: 'Internal',
+        asignacion: 'stock.ingreso.sobrante (Ganancia)',
+        operationVisible: '0 (AMBOS)',
+        enabled: true,
+      },
+      {
+        id: 'ajuste_egreso',
+        name: 'Ajuste Egreso',
+        code: 'AJ_EGR',
+        icon: '⚖️',
+        iconBg: 'rgba(96,165,250,.12)',
+        tipo: 'O',
+        entityApply: '(Vacío)',
+        inputCost: true,
+        shipmentType: 'Internal',
+        asignacion: 'stock.gastos.merma (Pérdida)',
+        operationVisible: '0 (AMBOS)',
+        enabled: true,
+      },
+      {
+        id: 'baja_caja_helado',
+        name: 'Baja Caja Helado',
+        code: 'BAJA_HEL',
+        icon: '📤',
+        iconBg: 'rgba(245,101,101,.12)',
+        tipo: 'O',
+        entityApply: 'BOX : DISCOUNT',
+        inputCost: true,
+        shipmentType: 'Internal',
+        asignacion: 'stock.gastos.cmv',
+        operationVisible: '1 (POS)',
+        enabled: true,
+      },
+      {
+        id: 'importacion_sap',
+        name: 'Importación SAP',
+        code: 'IMP_SAP',
+        icon: '📥',
+        iconBg: 'rgba(45,212,160,.12)',
+        tipo: 'I',
+        entityApply: 'VendorInvoice',
+        inputCost: false,
+        shipmentType: 'External',
+        asignacion: 'stock.altas.sap',
+        operationVisible: '2 (ADMIN)',
+        enabled: false,
+      },
+      {
+        id: 'apertura_caja',
+        name: 'Apertura de Caja',
+        code: 'AP_CAJA',
+        icon: '🔄',
+        iconBg: 'rgba(245,166,35,.12)',
+        tipo: 'IO',
+        entityApply: 'BOX : OPEN',
+        inputCost: false,
+        shipmentType: 'Internal',
+        asignacion: 'No Aplica',
+        operationVisible: '1 (POS)',
+        enabled: false,
+      },
+      {
+        id: 'mov_depositos',
+        name: 'Mov. Depósitos',
+        code: 'MOV_DEP',
+        icon: '↔️',
+        iconBg: 'rgba(96,165,250,.12)',
+        tipo: 'IO',
+        entityApply: '(Vacío)',
+        inputCost: false,
+        shipmentType: 'Internal',
+        asignacion: 'stock.logistica.transferencia',
+        operationVisible: '2 (ADMIN)',
+        enabled: false,
+      },
+      {
+        id: 'devolucion_prov',
+        name: 'Devolución Prov.',
+        code: 'DEV_PROV',
+        icon: '📤',
+        iconBg: 'rgba(245,101,101,.12)',
+        tipo: 'O',
+        entityApply: 'VENDOR : RETURN',
+        inputCost: false,
+        shipmentType: 'External',
+        asignacion: 'stock.altas.reintegro',
+        operationVisible: '2 (ADMIN)',
+        enabled: false,
+      },
+      {
+        id: 'consumo_interno',
+        name: 'Consumo Interno',
+        code: 'CONS_INT',
+        icon: '📤',
+        iconBg: 'rgba(245,101,101,.12)',
+        tipo: 'O',
+        entityApply: 'INTERNAL : USE',
+        inputCost: true,
+        shipmentType: 'Internal',
+        asignacion: 'stock.gastos.beneficios_personal',
+        operationVisible: '2 (ADMIN)',
+        enabled: false,
+      }
+    ];
+
+    // ── State ──
+    let originalState = {};
+    let currentFilter = 'all';
+    let dirty = false;
+
+    function snapshot() {
+      movements.forEach(m => { originalState[m.id] = m.enabled; });
+    }
+    snapshot();
+
+    // ── Render ──
+    function render(data) {
+      const tbody = document.getElementById('movementsTable');
+      tbody.innerHTML = '';
+      data.forEach((m, i) => {
+        const tr = document.createElement('tr');
+        tr.className = 'row-fade';
+        tr.style.animationDelay = `${i * 35}ms`;
+        tr.dataset.id = m.id;
+        tr.dataset.enabled = m.enabled;
+        tr.innerHTML = `
+      <td>
+        <div class="movement-name">
+          <div class="movement-name-text">${m.name}</div>
+        </div>
+      </td>
+      <td style="font-family:'DM Mono',monospace;font-size:13px;text-align:center;">${m.tipo}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text)">
+        <span style="background:var(--surface2);padding:4px 8px;border-radius:4px;border:1px solid var(--border)">${m.entityApply}</span>
+      </td>
+      <td style="font-size:13px;text-align:center;">${m.inputCost ? 'True' : 'False'}</td>
+      <td style="font-size:13px;">${m.shipmentType}</td>
+      <td style="font-size:13px;color:var(--muted);max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${m.asignacion}">
+        ${m.asignacion}
+      </td>
+      <td style="font-size:13px;">${m.operationVisible}</td>
+      <td class="toggle-cell">
+        <div class="toggle-wrap">
+          <label class="toggle">
+            <input type="checkbox" ${m.enabled ? 'checked' : ''} onchange="onToggle('${m.id}', this.checked)" />
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+      </td>
+    `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // ── Filter + Search ──
+    function getVisible() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      return movements.filter(m => {
+        const matchQ = !q || m.name.toLowerCase().includes(q) || m.code.toLowerCase().includes(q);
+        const matchF = currentFilter === 'all'
+          || (currentFilter === 'on' && m.enabled)
+          || (currentFilter === 'off' && !m.enabled);
+        return matchQ && matchF;
+      });
+    }
+
+    function filterRows() { render(getVisible()); }
+
+    function setFilter(f) {
+      currentFilter = f;
+      ['filterAll', 'filterOn', 'filterOff'].forEach(id => {
+        document.getElementById(id).classList.remove('active');
+      });
+      const map = { all: 'filterAll', on: 'filterOn', off: 'filterOff' };
+      document.getElementById(map[f]).classList.add('active');
+      render(getVisible());
+    }
+
+    // ── Toggle ──
+    function onToggle(id, val) {
+      const m = movements.find(x => x.id === id);
+      m.enabled = val;
+      const lbl = document.getElementById(`lbl-${id}`);
+      if (lbl) {
+        lbl.textContent = val ? 'ACTIVO' : 'INACTIVO';
+        lbl.className = 'toggle-label' + (val ? ' on' : '');
+      }
+      updateStats();
+      checkDirty();
+    }
+
+    function updateStats() {
+      const en = movements.filter(m => m.enabled).length;
+      document.getElementById('stat-enabled').textContent = en;
+      document.getElementById('stat-disabled').textContent = movements.length - en;
+    }
+
+    // ── Dirty state ──
+    function checkDirty() {
+      dirty = movements.some(m => m.enabled !== originalState[m.id]);
+      document.getElementById('saveBar').classList.toggle('visible', dirty);
+    }
+
+    function discardChanges() {
+      movements.forEach(m => { m.enabled = originalState[m.id]; });
+      dirty = false;
+      document.getElementById('saveBar').classList.remove('visible');
+      updateStats();
+      render(getVisible());
+    }
+
+    function saveChanges() {
+      snapshot();
+      dirty = false;
+      document.getElementById('saveBar').classList.remove('visible');
+      const en = movements.filter(m => m.enabled).length;
+      document.getElementById('toastSub').textContent =
+        `${en} de ${movements.length} tipos habilitados · HELDONMARIO`;
+      showToast();
+    }
+
+    function showToast() {
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3200);
+    }
+
+    // ── Init ──
+    document.getElementById('filterAll').classList.add('active');
+    render(movements);
+  </script>
+</body>
+
+</html>

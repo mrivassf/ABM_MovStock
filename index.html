@@ -121,7 +121,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 20px 40px 0;
+      padding: 12px 24px 0;
       font-size: 12px;
       color: var(--muted);
       font-family: 'DM Mono', monospace;
@@ -145,7 +145,7 @@
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      padding: 24px 40px 0;
+      padding: 16px 24px 0;
       gap: 24px;
     }
 
@@ -232,14 +232,14 @@
     .stats-strip {
       display: flex;
       gap: 16px;
-      padding: 24px 40px;
+      padding: 16px 24px;
     }
 
     .stat-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 16px 22px;
+      padding: 12px 16px;
       display: flex;
       flex-direction: column;
       gap: 4px;
@@ -274,7 +274,7 @@
     /* ── MAIN CONTENT ── */
     .main {
       flex: 1;
-      padding: 0 40px 48px;
+      padding: 0 24px 24px;
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -301,7 +301,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 16px 20px;
+      padding: 12px 16px;
       border-bottom: 1px solid var(--border);
       gap: 12px;
     }
@@ -380,7 +380,7 @@
     }
 
     thead th {
-      padding: 11px 20px;
+      padding: 10px 12px;
       font-size: 11px;
       font-family: 'DM Mono', monospace;
       letter-spacing: .08em;
@@ -411,7 +411,7 @@
     }
 
     td {
-      padding: 15px 20px;
+      padding: 10px 12px;
       vertical-align: middle;
     }
 
@@ -690,7 +690,7 @@
     .content-split {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 24px;
+      gap: 16px;
       align-items: start;
     }
 
@@ -698,10 +698,10 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 24px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 12px;
     }
 
     .form-wrap h2 {
@@ -713,7 +713,7 @@
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
     }
 
     .form-group label {
@@ -726,7 +726,7 @@
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 10px 14px;
+      padding: 6px 12px;
       font-size: 13px;
       font-family: 'Syne', sans-serif;
       color: var(--text);
@@ -843,11 +843,11 @@
                 <tr>
                   <th>Proceso</th>
                   <th>Tipo</th>
-                  <th>EntityApply</th>
-                  <th>InputCost</th>
-                  <th>ShipmentType</th>
+                  <th>Entidad a aplicar</th>
+                  <th>Costo</th>
+                  <th>Tipo de envío</th>
                   <th>Asignación</th>
-                  <th>OperationVisible</th>
+                  <th>Operación visible</th>
                   <th style="text-align:center;">Estado</th>
                   <th style="text-align:center; width: 80px;">Acciones</th>
                 </tr>
@@ -889,7 +889,16 @@
 
           <div class="form-group">
             <label>Entidad a aplicar</label>
-            <input type="text" class="form-control" placeholder="Ej. Proveedor, Franquicia..." />
+            <select class="form-control">
+              <option value="">(Vacío)</option>
+              <option value="SALE:ADD">SALE : ADD</option>
+              <option value="SALE:DISCOUNT">SALE : DISCOUNT</option>
+              <option value="BOX:DISCOUNT">BOX : DISCOUNT</option>
+              <option value="BOX:OPEN">BOX : OPEN</option>
+              <option value="VendorInvoice">VendorInvoice</option>
+              <option value="VENDOR:RETURN">VENDOR : RETURN</option>
+              <option value="INTERNAL:USE">INTERNAL : USE</option>
+            </select>
           </div>
 
           <div class="form-group">
@@ -903,7 +912,20 @@
 
           <div class="form-group">
             <label>Asignación (Mapeo de cuentas)</label>
-            <input type="text" class="form-control" placeholder="Ej. Cuenta origen / destino" />
+            <select class="form-control">
+              <option value="">Seleccione asignación...</option>
+              <option value="stock.gastos.cmv">stock.gastos.cmv</option>
+              <option value="stock.gastos.cmv (Costo Histórico)">stock.gastos.cmv (Costo Histórico)</option>
+              <option value="stock.altas.compra">stock.altas.compra</option>
+              <option value="stock.altas.stock_inicial">stock.altas.stock_inicial</option>
+              <option value="stock.ingreso.sobrante (Ganancia)">stock.ingreso.sobrante (Ganancia)</option>
+              <option value="stock.gastos.merma (Pérdida)">stock.gastos.merma (Pérdida)</option>
+              <option value="stock.altas.sap">stock.altas.sap</option>
+              <option value="stock.logistica.transferencia">stock.logistica.transferencia</option>
+              <option value="stock.altas.reintegro">stock.altas.reintegro</option>
+              <option value="stock.gastos.beneficios_personal">stock.gastos.beneficios_personal</option>
+              <option value="No Aplica">No Aplica</option>
+            </select>
           </div>
 
           <div class="form-group">
@@ -1167,10 +1189,7 @@
         </div>
       </td>
       <td style="text-align:center; white-space:nowrap;">
-        <button title="Eliminar" style="background:none;border:none;cursor:pointer;color:var(--muted);padding:4px;" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--muted)'">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-        </button>
-        <button title="Editar" style="background:none;border:none;cursor:pointer;color:var(--muted);padding:4px;margin-left:4px;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">
+        <button title="Editar" style="background:none;border:none;cursor:pointer;color:var(--muted);padding:4px;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
         </button>
       </td>

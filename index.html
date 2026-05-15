@@ -1228,6 +1228,67 @@
         .summary-row strong {
             font-weight: 500;
         }
+        /* ── MODAL ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 13, 26, 0.6);
+            backdrop-filter: blur(2px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            background: var(--card);
+            border-radius: var(--radius-lg);
+            width: 400px;
+            max-width: 90vw;
+            box-shadow: var(--shadow-md);
+            transform: translateY(10px);
+            transition: transform 0.2s ease;
+            overflow: hidden;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 24px;
+            font-size: 13.5px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
     </style>
 </head>
 
@@ -2019,7 +2080,71 @@
 
     </div>
 
+    <!-- MODAL CONFIRMACIÓN -->
+    <div class="modal-overlay" id="confirm-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Desactivar forma de pago</div>
+            </div>
+            <div class="modal-body">
+                <p id="modal-msg-1">¿Desea desactivar esta forma de pago?</p>
+                <div id="modal-msg-2" class="info-block warning" style="margin-top:16px;"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal(false)">Cancelar</button>
+                <button class="btn btn-primary" style="background:var(--danger);" onclick="closeModal(true)">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        let pendingStateToggle = null;
+
+        function handleStateChange(e) {
+            const toggle = e.target;
+            if (!toggle.checked) {
+                toggle.checked = true;
+                pendingStateToggle = toggle;
+                
+                const row = toggle.closest('tr');
+                const deps = row.cells[2].innerText.trim();
+                
+                const modal = document.getElementById('confirm-modal');
+                const msg2 = document.getElementById('modal-msg-2');
+                
+                if (deps === '—' || deps === '' || deps === '0 franquicias') {
+                    msg2.className = 'info-block';
+                    msg2.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg><div>No existen depósitos vinculados a esta forma de pago. Puede desactivarla de forma segura.</div>';
+                } else {
+                    msg2.className = 'info-block warning';
+                    msg2.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div>Atención: Existen depósitos vinculados (<strong>' + deps + '</strong>). Si desactiva la forma de pago, dejará de estar disponible en los puntos de venta.</div>';
+                }
+                
+                modal.classList.add('active');
+            }
+        }
+
+        function closeModal(confirm) {
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.remove('active');
+            
+            if (confirm && pendingStateToggle) {
+                pendingStateToggle.checked = false;
+            }
+            pendingStateToggle = null;
+        }
+
+        setTimeout(() => {
+            const pmRows = document.querySelectorAll('#pm-list-view .data-table tbody tr');
+            pmRows.forEach(row => {
+                if (row.cells.length > 4) {
+                    const stateToggle = row.cells[4].querySelector('input[type="checkbox"]');
+                    if (stateToggle) {
+                        stateToggle.addEventListener('change', handleStateChange);
+                    }
+                }
+            });
+        }, 100);
         const franchiseeData = {
             hs: {
                 name: 'Helados del Sur SA',
